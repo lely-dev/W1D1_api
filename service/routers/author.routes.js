@@ -1,21 +1,22 @@
 import { Router } from "express";
 import User from "../models/user.model.js";
 
-export const apiRoute = Router();
+export const authorsRoute = Router();
 
 
 // Richiesta GET AUTHORS
-apiRoute.get('/', async (req, res) => {
-    res.send('Hello World!')
+authorsRoute.get('/', async (req, res) => {
+    res.send('sono nella lista autori')
 })
 
 
   //Richiesta POST
-apiRoute.post("/", async (req, res, next) => {
+  authorsRoute.post("/", async (req, res, next) => {
 try {
     let user = await User.create(req.body);
 
     res.send(user).status(400);
+    console.log('ho fatto un post autori');
 } catch (err) {
 
     next(err);
@@ -24,12 +25,13 @@ try {
 
 
 //RICHIESTA GET AUTHOR
-apiRoute.get("/:id", async (req, res, next) => {
+authorsRoute.get("/:id", async (req, res, next) => {
     try {
 
       let user = await User.findById(req.params.id);
         
       res.send(user);
+      console.log('sono all ID autore')
     } catch (err) {
 
       next(err);
@@ -38,13 +40,14 @@ apiRoute.get("/:id", async (req, res, next) => {
 
 
   //Richiesta PUT AUTHOR
-  apiRoute.put("/:id", async (req, res, next) => {
+  authorsRoute.put("/:id", async (req, res, next) => {
     try {
      
       let user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       });
       res.send(user);
+      console.log('modifico l autore')
     } catch (err) {
 
       next(err);
@@ -53,14 +56,14 @@ apiRoute.get("/:id", async (req, res, next) => {
 
 
   //Richiesta DELETE Author
-  apiRoute.delete("/:id", async (req, res, next) => {
+  authorsRoute.delete("/:id", async (req, res, next) => {
     try {
       
       await User.deleteOne({
         _id: req.params.id,
       });
      
-      res.send("L'utente è stato eliminato correttamente").status(204);
+      res.send("L'autore è stato eliminato").status(204);
     } catch (err) {
       
       next(err);

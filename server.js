@@ -1,7 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import { config } from "dotenv";
-import { apiRoute } from "./service/routers/api.routes.js";
+import { authorsRoute } from "./service/routers/author.routes.js";
+import { blogRoute } from "./service/routers/blog.routes.js";
 const app = express()
 const port = 3010
 config()
@@ -10,7 +12,11 @@ config()
 app.use(express.json());
 
 // per utilizzare la route
-app.use("/authors", apiRoute);
+app.use("/authors", authorsRoute);
+app.use("/blogPosts", blogRoute)
+
+//connessione per il frontend
+app.use(cors());
 
 
 //Connessione al server
