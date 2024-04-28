@@ -42,7 +42,22 @@ const blogSchema = new Schema ({
     content: {
         type: String,
         require: true
-    }
+    },
+
+    comment: [
+        {
+            author:{
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            },
+
+            description:{
+                type: String,
+                require: true
+            }
+
+        }
+    ]
 })
 
 export default model ('blog', blogSchema);

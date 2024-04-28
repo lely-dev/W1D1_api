@@ -1,5 +1,6 @@
 import { Router } from "express";
 import User from "../models/user.model.js";
+import cloudinaryAvatar from '../middlewares/multer.avatar.js'
 
 export const authorsRoute = Router();
 
@@ -69,3 +70,21 @@ authorsRoute.get("/:id", async (req, res, next) => {
       next(err);
     }
   });
+
+
+  // RICHIESTA PATCH IMG AVATAR
+  authorsRoute.patch("/:id/avatar", cloudinaryAvatar, async (req, res, next) => {
+    try {
+      let updateAvatarUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { avatar: req.file.path },
+        { new: true }
+      );
+
+      res.send(updateAvatarUser);
+    } catch (error) {
+
+      next(error);
+    }
+  });
+  
