@@ -1,6 +1,7 @@
 import { Router } from "express";
 import blog from "../models/blog.model.js";
 import cloudinaryCover from '../middlewares/multer.cover.js'
+import user from "../models/user.model.js"
 
 export const blogRoute = Router();
 
@@ -38,10 +39,10 @@ blogRoute.get('/:id/comments', async (req, res, next) => {
 })
 
 
-// GET POST TRAMITE ID
+// GET DEL BLOG TRAMITE ID
 blogRoute.get('/:id', async (req, res, next) => {
     try {
-        let blogId = await blog.findById(req.params.id, req.body);
+        let blogId = await blog.findById(req.params.id, req.body).populate("comment");
 
         res.send(blogId)
         console.log('sono nel blog con ID')
@@ -50,6 +51,29 @@ blogRoute.get('/:id', async (req, res, next) => {
     }
 
 })
+
+// POST DEL COMMENTO AL BLOG TARMITE ID
+blogRoute.post('/:id', async(req,res, next)=>{
+    try {
+        let findBlog = await blog.findById(req.params.id);
+
+        let newComment = await blog.create({...req.body, comment: {
+            author: req.user ? req.user._id : null,
+            description: req.body.description
+        }});
+
+        findBlog.comment.push(newComment._id);
+
+        await findBlog.save();
+
+        res.send(newComment).status(200);
+        console.log('ho creato un nuovo commento al blog')
+        
+    } catch (error) {
+        next(error)
+    }
+})
+
 
 
 // POST DEL NUOVO BLOG
@@ -66,18 +90,6 @@ blogRoute.post('/', async(req,res, next)=>{
 })
 
 
-// POST DEL COMMENTO AL BLOG
-blogRoute.post('/id', async(req,res, next)=>{
-    try {
-        let newComment = await blog.create(req.body);
-
-        res.send(newComment).status(200);
-        console.log('ho creato un nuovo commento al blog')
-        
-    } catch (error) {
-        next(error)
-    }
-})
 
 
 // PUT DEL COMMENTO NEL BLOG CON ID
@@ -113,7 +125,6 @@ blogRoute.put('/:id', async(req, res, next) =>{
 
 
 // DELETE DEL COMMENTO CON ID
-
 blogRoute.delete('/:id/comment/:id', async(req, res, next) =>{
     try {
         await blog.deleteOne({
@@ -129,7 +140,6 @@ blogRoute.delete('/:id/comment/:id', async(req, res, next) =>{
 
 
 // DELETE DEL BLOG CON ID
-
 blogRoute.delete('/:id', async(req, res, next) =>{
     try {
         await blog.deleteOne({
