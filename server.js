@@ -4,6 +4,8 @@ import cors from "cors";
 import { config } from "dotenv";
 import { authorsRoute } from "./service/routers/author.routes.js";
 import { blogRoute } from "./service/routers/blog.routes.js";
+import { authMiddleware } from "./service/middlewares/authentication.js";
+import {authRouter} from "./service/routers/auth.routes.js";
 const app = express()
 const port = 3010
 config()
@@ -12,8 +14,9 @@ config()
 app.use(express.json());
 
 // per utilizzare la route
-app.use("/authors", authorsRoute);
-app.use("/blogPosts", blogRoute)
+app.use("/authors", authMiddleware,  authorsRoute);
+app.use("/blogPosts", authMiddleware, blogRoute)
+app.use("/auth", authRouter)
 
 //connessione per il frontend
 app.use(cors());

@@ -42,10 +42,10 @@ blogRoute.get('/:id/comments', async (req, res, next) => {
 // GET DEL BLOG TRAMITE ID
 blogRoute.get('/:id', async (req, res, next) => {
     try {
-        let blogId = await blog.findById(req.params.id, req.body).populate("comment");
+        let blogId = await blog.findById(req.params.id, req.body);
 
-        res.send(blogId)
-        console.log('sono nel blog con ID')
+        res.send(blogId.populate("comment"));
+        console.log('sono nel blog con ID');
     } catch (error) {
         next(error)
     }
@@ -55,14 +55,13 @@ blogRoute.get('/:id', async (req, res, next) => {
 // POST DEL COMMENTO AL BLOG TARMITE ID
 blogRoute.post('/:id', async(req,res, next)=>{
     try {
+        //CERCO IL BLOG CON L'ID
         let findBlog = await blog.findById(req.params.id);
-
-        let newComment = await blog.create({...req.body, comment: {
-            author: req.user ? req.user._id : null,
-            description: req.body.description
-        }});
-
-        findBlog.comment.push(newComment._id);
+        //CREO UN NUOVO COMMENTO
+        const newComment = {author: req.user ? req.user._id : null,
+            description: req.body.description};
+        //FACCIO IL PUSH DEL NUOVO COMMENTO NEL BLOG E LO SALVO
+        findBlog.comment.push(newComment);
 
         await findBlog.save();
 

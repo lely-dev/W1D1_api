@@ -12,17 +12,17 @@ authorsRoute.get('/', async (req, res) => {
 
 
   //Richiesta POST
-  authorsRoute.post("/", async (req, res, next) => {
-try {
-    let user = await User.create(req.body);
+//   authorsRoute.post("/", async (req, res, next) => {
+// try {
+//     let user = await User.create(req.body);
 
-    res.send(user).status(400);
-    console.log('ho fatto un post autori');
-} catch (err) {
+//     res.send(user).status(400);
+//     console.log('ho fatto un post autori');
+// } catch (err) {
 
-    next(err);
-}
-});
+//     next(err);
+// }
+// });
 
 
 //RICHIESTA GET AUTHOR
