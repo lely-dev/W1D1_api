@@ -1,7 +1,7 @@
 import { Router } from "express";
 import blog from "../models/blog.model.js";
 import cloudinaryCover from '../middlewares/multer.cover.js'
-import user from "../models/user.model.js"
+import { sendEmail } from "../../utils/sendMail.js";
 
 export const blogRoute = Router();
 
@@ -73,13 +73,22 @@ blogRoute.post('/:id', async(req,res, next)=>{
     }
 })
 
+//MAIL DOPO IL POST DEL NUOVO BLOG
 
+const mailNewBlog = `<h1>You have successfully uploaded the blog!</h1>
+<p>Continue to publish content.</>`;
+
+const mailNewBlogTitle = `<h1>New Content Created</h1>`;
 
 // POST DEL NUOVO BLOG
 blogRoute.post('/', async(req,res, next)=>{
     try {
         let newPost = await blog.create(req.body);
 
+        if(req.body.email){ sendEmail(mailNewBlog, req.body.email, mailNewBlogTitle);}
+
+       
+        
         res.send(newPost).status(200);
         console.log('ho fatto il post di un nuovo blog')
         

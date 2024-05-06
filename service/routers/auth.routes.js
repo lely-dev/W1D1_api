@@ -2,9 +2,16 @@ import { Router } from "express";
 import user from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateJWT } from "../middlewares/authentication.js";
+import { sendEmail } from "../../utils/sendMail.js";
 
 export const authRouter = Router();
 
+// MESSAGGIO MAIL PER REGISTRAZIONE
+
+const mailRegister = `<h1>You have successfully registered</h1>
+<p>StriveBlog welcomes you to the platform.</>`;
+
+const mailTitle = `<h1>Welcome to our family!</h1>`;
 
 // LOGIN PAGE
 authRouter.get("/", async (req, res, next) => {
@@ -19,7 +26,8 @@ authRouter.get("/", async (req, res, next) => {
         ...req.body,
         password: await bcrypt.hash(req.body.password, 10),
       });
-  
+      
+      sendEmail(mailRegister, req.body.email, mailTitle)
       res.send(newUser);
 
     } catch (err) {
