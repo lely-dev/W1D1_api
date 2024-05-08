@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import user from "../models/user.model.js";
 
+
+//CREA UN JWT ALL UTENTE CHE SI REGISTRA
 export const generateJWT = (payload) => {
 
     return new Promise((resolve, reject) => {
@@ -37,7 +39,7 @@ export const jwtVerify = (token) => {
     })
 };
 
-
+// AUTORIZZAZIONE PER IL LOGIN DELL?UTENTE GIA REGISTRATO
 export const authMiddleware = async (req, res, next) =>{
 
     try {

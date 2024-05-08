@@ -24,6 +24,17 @@ authorsRoute.get('/', async (req, res) => {
 // }
 // });
 
+authorsRoute.get("/me", async (req, res, next) => {
+ 
+  try {
+    let user = await User.findById(req.user.id);
+
+    res.send(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 //RICHIESTA GET AUTHOR
 authorsRoute.get("/:id", async (req, res, next) => {

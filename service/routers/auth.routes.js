@@ -3,6 +3,7 @@ import user from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateJWT } from "../middlewares/authentication.js";
 import { sendEmail } from "../../utils/sendMail.js";
+import passport from "passport";
 
 export const authRouter = Router();
 
@@ -67,6 +68,19 @@ authRouter.post("/login", async (req, res, next) => {
       }
     } catch (err) {
       next(err);
+    }
+  });
+
+
+  // GET PER IL LOGIN TRAMITE GOOGLE
+  authRouter.get("/googleLogin", passport.authenticate("google", {scope:["profile", "email"]}));
+
+  authRouter.get("/callback", passport.authenticate("google", {session:false}), (req,res,next)=>{
+    try {
+      res.redirect(`http://localhost:3000/me?accessToken=${req.user.accessToken}`);
+      
+    } catch (error) {
+      next(error);
     }
   });
   

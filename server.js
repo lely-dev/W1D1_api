@@ -6,20 +6,30 @@ import { authorsRoute } from "./service/routers/author.routes.js";
 import { blogRoute } from "./service/routers/blog.routes.js";
 import { authMiddleware } from "./service/middlewares/authentication.js";
 import {authRouter} from "./service/routers/auth.routes.js";
+import passport from "passport";
+import googleStrategy from "./service/middlewares/authgoogle.js";
+
+
 const app = express()
 const port = 3010
 config()
 
+//connessione per il frontend
+app.use(cors());
+
 //per abilitare i dati json
 app.use(express.json());
+
+//google auth
+passport.use("google", googleStrategy);
+
 
 // per utilizzare la route
 app.use("/authors", authMiddleware,  authorsRoute);
 app.use("/blogPosts", authMiddleware, blogRoute)
 app.use("/auth", authRouter)
 
-//connessione per il frontend
-app.use(cors());
+
 
 
 //Connessione al server
