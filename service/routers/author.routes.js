@@ -7,7 +7,14 @@ export const authorsRoute = Router();
 
 // Richiesta GET AUTHORS
 authorsRoute.get('/', async (req, res) => {
-    res.send('sono nella lista autori')
+  try {
+    const user = await User.find();
+    res.json(user);
+    
+} catch (error) {
+    console.error("Errore durante il recupero degli autori:", error);
+    res.status(500).json({ message: 'Errore durante il recupero degli autori' });
+}
 })
 
 

@@ -7,7 +7,14 @@ export const blogRoute = Router();
 
 // GET LISTA DI BLOG POST
 blogRoute.get('/', async (req, res) => {
-    res.send('sono nei post')
+    try {
+        const blogs = await blog.find();
+        res.json(blogs);
+        
+    } catch (error) {
+        console.error("Errore durante il recupero dei blog:", error);
+        res.status(500).json({ message: 'Errore durante il recupero dei blog' });
+    }
 })
 
 
