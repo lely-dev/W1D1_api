@@ -59,7 +59,8 @@ authRouter.post("/login", async (req, res, next) => {
           });
   
    
-          res.send({ user: findUser, token });
+          res.send({ user: findUser, token});
+          // res.send({ user: { _id: findUser._id, username: findUser.username }, token });
         } else {
           res.status(400).send("Password errata");
         }

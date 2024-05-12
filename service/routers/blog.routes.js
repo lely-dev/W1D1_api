@@ -172,6 +172,7 @@ blogRoute.delete('/:id', async(req, res, next) =>{
  // RICHIESTA PATCH IMG COVER
  blogRoute.patch("/:id/cover", cloudinaryCover, async (req, res, next) => {
     try {
+        console.log(req.file.path);
       let updateBlogCover = await blog.findByIdAndUpdate(
         req.params.id,
         { cover: req.file.path },
