@@ -27,7 +27,12 @@ const googleStrategy = new GoogleStrategy(options, async( _, __, profile, passpo
 
         const newUser = new User({
             username: email,
+            password: sub,
+            nome: given_name,
+            cognome: family_name,
+            email: email,
             googleId: sub,
+            avatar: picture,
         });
 
         await newUser.save();

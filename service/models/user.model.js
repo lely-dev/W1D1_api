@@ -35,7 +35,7 @@ const userSchema = new Schema({
 
     data_di_nascita:{
         type: String,
-        required: true,
+        required: false,
     },
 
     avatar:{
