@@ -2,6 +2,7 @@ import { Router } from "express";
 import blog from "../models/blog.model.js";
 import cloudinaryCover from '../middlewares/multer.cover.js'
 import { sendEmail } from "../../utils/sendMail.js";
+import User from "../models/user.model.js";
 
 export const blogRoute = Router();
 
@@ -16,6 +17,19 @@ blogRoute.get('/', async (req, res) => {
         res.status(500).json({ message: 'Errore durante il recupero dei blog' });
     }
 })
+
+//BLOG DELL'UTENTE REGISTRATO
+blogRoute.get("/me", async (req, res, next) => {
+ 
+    try {
+     
+        const blogs = await blog.find({author: req.user._id});
+
+      res.send(blogs);
+    } catch (err) {
+      next(err);
+    }
+  });
 
 
 // GET RITORNA UN COMMENTO DEL POST TRAMITE ID
@@ -90,7 +104,9 @@ const mailNewBlogTitle = `<h1>New Content Created</h1>`;
 // POST DEL NUOVO BLOG
 blogRoute.post('/', async(req,res, next)=>{
     try {
-        let newPost = await blog.create(req.body);
+        
+
+        let newPost = await blog.create({...req.body, author: req.user._id});
 
         if(req.body.email){ sendEmail(mailNewBlog, req.body.email, mailNewBlogTitle);}
 

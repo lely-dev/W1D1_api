@@ -8,6 +8,7 @@ import { authMiddleware } from "./service/middlewares/authentication.js";
 import {authRouter} from "./service/routers/auth.routes.js";
 import passport from "passport";
 import googleStrategy from "./service/middlewares/authgoogle.js";
+import { badRequest, unathorizedError, notFoundError, genericError } from "./service/middlewares/errorHandler.js";
 
 
 const app = express()
@@ -25,11 +26,16 @@ passport.use("google", googleStrategy);
 
 
 // per utilizzare la route
+app.use("/auth", authRouter)
 app.use("/authors", authMiddleware,  authorsRoute);
 app.use("/blogPosts", authMiddleware, blogRoute)
-app.use("/auth", authRouter)
 
 
+//per gestire gli errori
+app.use(badRequest);
+app.use(unathorizedError);
+app.use(notFoundError);
+app.use(genericError);
 
 
 //Connessione al server

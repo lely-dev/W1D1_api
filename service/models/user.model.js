@@ -13,6 +13,11 @@ const userSchema = new Schema({
         required: true,
     },
 
+    googleId: {
+        type: String,
+        required: false,
+      },
+
     nome:{
         type: String,
         required: true,

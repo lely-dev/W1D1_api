@@ -28,15 +28,12 @@ const blogSchema = new Schema ({
         }
     },
 
-    author:{
-        name:{
-            type: String,
-            require: true
-        },
-        avatar: {
-            type: String,
-            require: true
-        }
+    //REFERENCING AUTHOR
+   
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
 
     content: {
@@ -44,6 +41,7 @@ const blogSchema = new Schema ({
         require: true
     },
 
+    //EMBEDDING
     comment: [
         {
             author:{
